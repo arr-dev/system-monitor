@@ -20,7 +20,7 @@ module Monitor
   def decode_size(bytes)
     types = ['B', 'KiB', 'MiB', 'GiB', 'TiB']
     i = 0
-    while bytes >= 1024 && i < (types.length) -1
+    while bytes >= 1024 && i < (types.length) - 1
       bytes /= 1024
       i += 1
     end
