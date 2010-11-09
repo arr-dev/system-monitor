@@ -1,4 +1,4 @@
-require 'lib/monitor'
+require 'monitor'
 require 'ping'
 
 class MonitorPing < Monitor::Base
