@@ -1,9 +1,11 @@
+require 'logger'
+
 # Module containing all monitor classes.
 #
 # == Info
 # * *Package*    Monitor
 #
-module Monitor
+module SysMonitor
     
   # Main monitor abstract class.
   # All other monitors extend it.

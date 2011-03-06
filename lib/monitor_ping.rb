@@ -1,10 +1,10 @@
-require 'monitor'
+require 'sys_monitor'
 require 'ping'
 
-class MonitorPing < Monitor::Base
-  include Monitor::Misc
+class MonitorPing < SysMonitor::Base
+  include SysMonitor::Misc
   def initialize
-    
+    super
   end
 
   def do_monitoring
