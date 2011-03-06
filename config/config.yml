@@ -1,0 +1,22 @@
+# global config
+:global:
+  :log: 
+    :level: 0
+    :filename: monitor.log
+  :classes:
+    - ping
+    - cpu
+
+# env specific config
+:development:
+  :ping:
+    :host:
+      - "google.com"
+      - "google.rs"
+      - "123skins.de"
+    :timeout: 10
+    :port: 80
+  :cpu:
+    :limit:
+      :one_min: 10
+      :five_min: 10
