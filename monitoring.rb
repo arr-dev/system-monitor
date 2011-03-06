@@ -1,8 +1,14 @@
+require 'yaml'
 
 # First, set load path.
 $LOAD_PATH.unshift(File.join(File.expand_path(File.dirname(__FILE__), './lib')))
+CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), './config/config.yml'))
 
-require 'monitor_ping'
+APP_ENV = 'development'
 
-monitor = MonitorPing.new
-monitor.do_monitoring
+CONFIG[:global][:classes].each do |klass|
+  require "monitor_#{klass}"
+
+  monitor = "Monitor#{klass.to_s.capitalize}".constantize.new
+  monitor.do_monitoring
+end
