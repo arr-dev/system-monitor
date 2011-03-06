@@ -8,13 +8,13 @@ class MonitorPing < SysMonitor::Base
   end
 
   def do_monitoring
-    response = Ping.pingecho "google.com", 10, 80
-    if response
-      ret = 'radi'
-    else
-      ret = 'ne radi'
+    @config[:ping][:host].each do |host|
+      response = Ping.pingecho host, @config[:ping][:timeout], @config[:ping][:port]
+      if response
+        @log.debug "Host #{host} is online"
+      else
+        @log.error "Host #{host} is offline"
+      end
     end
-    puts self.decode_size 1024
-    puts ret.inspect
   end
 end

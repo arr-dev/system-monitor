@@ -1,4 +1,6 @@
+require 'rubygems'
 require 'logger'
+require 'active_support'
 
 # Module containing all monitor classes.
 #
@@ -15,9 +17,11 @@ module SysMonitor
   #
   class Base
     def initialize
-      logfile = File.join(File.dirname(__FILE__), '../log/monitor.log')
+      @config = CONFIG[APP_ENV.to_sym]
+
+      logfile = File.join(File.dirname(__FILE__), "../log/#{CONFIG[:global][:log][:filename]}")
       @log = Logger.new(logfile, 'weekly')
-      @log.level = Logger::DEBUG
+      @log.level = CONFIG[:global][:log][:level]
     end
   end
 
