@@ -1,6 +1,7 @@
 # global config
 :global:
-  :log: 
+  :log:
+    # log levels: DEBUG	=	0, INFO	=	1, WARN	=	2, ERROR	=	3, FATAL	=	4,UNKNOWN	=	5
     :level: 0
     :filename: monitor.log
   :classes:
@@ -20,3 +21,4 @@
     :limit:
       :one_min: 10
       :five_min: 10
+      :fifteen_min: 10
