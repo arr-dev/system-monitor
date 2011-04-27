@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'logger'
 require 'active_support'
 
 # Module containing all monitor classes.
@@ -8,7 +7,13 @@ require 'active_support'
 # * *Package*    Monitor
 #
 module SysMonitor
-    
+
+  CPU_FILE = '/proc/loadavg'
+  CPU_CHECKS = %w(one five fifteen)
+  LOAD_AVG_ONE_MIN = 0
+  LOAD_AVG_FIVE_MIN = 1
+  LOAD_AVG_FIFTEEN_MIN = 2
+  
   # Main monitor abstract class.
   # All other monitors extend it.
   #
@@ -17,11 +22,16 @@ module SysMonitor
   #
   class Base
     def initialize
-      @config = CONFIG[APP_ENV.to_sym]
+      @config = APP_CONFIG[APP_ENV.to_sym]
 
-      logfile = File.join(File.dirname(__FILE__), "../log/#{CONFIG[:global][:log][:filename]}")
+      logfile = File.join(File.dirname(__FILE__), "../log/#{APP_CONFIG[:global][:log][:filename]}")
       @log = Logger.new(logfile, 'weekly')
-      @log.level = CONFIG[:global][:log][:level]
+      @log.level = APP_CONFIG[:global][:log][:level]
+      @log.formatter = proc { |severity, datetime, progname, msg|
+          "#{datetime} (#{severity}): #{msg}\n"
+        }
+      @log.old_datetime_format = "%d-%m-%Y %H:%M:%S"
+
     end
   end
 
@@ -40,6 +50,13 @@ module SysMonitor
       end
 
       return ("%.02f" % bytes).to_s + ' ' + types[i].to_s
+    end
+    
+    # Get module name from class name
+    # Example (returns A):
+    #  class_module_name(A::B)
+    def class_module_name(klass)
+      klass.class.name.split("::").first
     end
   end
 end

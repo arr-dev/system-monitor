@@ -1,14 +1,17 @@
 require 'yaml'
+require 'erb'
+require 'logger'
 
 # First, set load path.
 $LOAD_PATH.unshift(File.join(File.expand_path(File.dirname(__FILE__), './lib')))
-CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), './config/config.yml'))
+# We use ERB so we can use constants in config.
+APP_CONFIG = YAML::load(ERB.new(File.read(File.join(File.dirname(__FILE__), './config/config.yml'))).result)
 
 APP_ENV = 'development'
 
-CONFIG[:global][:classes].each do |klass|
+APP_CONFIG[:global][:classes].each do |klass|
   require "monitor_#{klass}"
 
-  monitor = "Monitor#{klass.to_s.capitalize}".constantize.new
+  monitor = "SysMonitor::Monitor#{klass.to_s.capitalize}".constantize.new
   monitor.do_monitoring
 end

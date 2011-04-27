@@ -1,24 +1,21 @@
 require 'sys_monitor'
+module SysMonitor
+  class MonitorCpu < SysMonitor::Base
 
-class MonitorCpu < SysMonitor::Base
-  CPU_FILE = '/proc/loadavg'
-  CHECKS = ['ONE', 'FIVE', 'FIFTEEN']
-  LOAD_AVG_ONE_MIN = 0
-  LOAD_AVG_FIVE_MIN = 1
-  LOAD_AVG_FIFTEEN_MIN = 2
+    include Misc
+    def initialize
+      super
+    end
 
-  include SysMonitor::Misc
-  def initialize
-    super
-  end
-
-  def do_monitoring
-    load = IO.read(CPU_FILE)
-    load_avg = load.split(' ')
-    CHECKS.each do |check|
-      @log.info "Load #{check} min: " + load_avg["#{self.class}::LOAD_AVG_#{check}_MIN".constantize]
-      if load_avg["LOAD_AVG_#{check}_MIN".constantize].to_i > @config[:cpu][:limit]["#{check.downcase}_min".to_sym]
-
+    def do_monitoring
+      load = IO.read(CPU_FILE)
+      load_avg = load.split(' ')
+      CPU_CHECKS.each do |check|
+        const_val = class_module_name(self).constantize.const_get("LOAD_AVG_#{check.upcase}_MIN")
+        @log.info "Load #{check} min: " + load_avg[const_val]
+        if load_avg[const_val].to_i > @config[:cpu][:limit]["#{check}_min".to_sym]
+          puts const_val
+        end
       end
     end
   end
