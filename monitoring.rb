@@ -1,6 +1,8 @@
 require 'yaml'
 require 'erb'
 require 'logger'
+require 'rubygems'
+require 'active_support/core_ext/string/inflections'
 
 # First, set load path.
 $LOAD_PATH.unshift(File.join(File.expand_path(File.dirname(__FILE__), './lib')))
@@ -15,3 +17,4 @@ APP_CONFIG[:global][:classes].each do |klass|
   monitor = "SysMonitor::Monitor#{klass.to_s.capitalize}".constantize.new
   monitor.do_monitoring
 end
+

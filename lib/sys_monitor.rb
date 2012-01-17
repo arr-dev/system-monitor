@@ -30,7 +30,7 @@ module SysMonitor
       @log.formatter = proc { |severity, datetime, progname, msg|
           "#{datetime} (#{severity}): #{msg}\n"
         }
-      @log.old_datetime_format = "%d-%m-%Y %H:%M:%S"
+      @log.datetime_format = "%d-%m-%Y %H:%M:%S"
 
     end
   end
